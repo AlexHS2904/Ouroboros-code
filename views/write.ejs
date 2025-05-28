@@ -1,0 +1,122 @@
+<%- include('partials/headerB.ejs') %>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/CSS/form.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Blog</title>
+</head>
+<body>
+    <h1 class="pt-4">Escribe un Blog</h1>
+
+    <form id="blogForm">
+        <!-- TÍTULO -->
+        <div class="form-group pt-3">
+            <label for="title">Título:</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <!-- IMAGEN -->
+        <label for="image">Imagen:</label>
+        <div class="form-group-center pt-3">
+            <label for="image-upload" class="upload-box">
+                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <div class="upload-text">Subir una Imagen</div>
+                <div class="upload-subtext" id="filename">Ningún archivo seleccionado</div>
+                <input type="file" id="image-upload" name="image" accept="image/*" hidden onchange="updateFilename(this)">
+            </label>
+        </div>
+
+        <!-- DESCRIPCIÓN -->
+        <div class="form-group pt-3">
+            <label for="description">Descripción:</label>
+            <textarea class="form-control" rows="5" id="description" name="description" required></textarea>
+        </div>
+
+        <!-- BOTÓN -->
+        <div class="form-group-center pt-3">
+            <button type="submit" class="btn btn-outline-dark">Publicar</button>
+        </div>
+    </form>
+
+    <script>
+        function updateFilename(input) {
+            const filename = input.files[0]?.name || 'Ningún archivo seleccionado';
+            document.getElementById('filename').innerText = filename;
+        }
+
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Error al subir la imagen');
+
+                const result = await response.json();
+                document.getElementById('filename').innerText = 'Imagen cargada con éxito 🎉';
+                return result.imageName;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('filename').innerText = 'Error al subir 😞';
+                throw error;
+            }
+        }
+
+        async function submitBlog(title, description, imageName) {
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        imageName
+                    })
+                });
+
+                if (!response.ok) throw new Error('Error al guardar el blog');
+
+                const result = await response.json();
+                alert('¡Blog publicado con éxito!');
+                window.location.href = '/';
+            } catch (error) {
+                console.error(error);
+                alert('Error al publicar el blog');
+            }
+        }
+
+        document.getElementById('blogForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const imageInput = document.getElementById('image-upload');
+            const imageFile = imageInput.files[0];
+
+            if (!imageFile) {
+                alert('Por favor, selecciona una imagen');
+                return;
+            }
+
+            try {
+                const imageName = await uploadImage(imageFile);
+                await submitBlog(title, description, imageName);
+            } catch (error) {
+                console.error('Error en el proceso:', error);
+            }
+        });
+    </script>
+</body>
+
+<%- include('partials/footerB.ejs') %>
+</html>

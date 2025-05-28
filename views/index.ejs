@@ -1,0 +1,28 @@
+<%- include('partials/headerB.ejs') %>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contenedor de Tarjetas</title>
+    <link rel="stylesheet" href="/CSS/styles.css">
+</head>
+<body>
+    <div class="header-index">
+        <h2 class="title-index">Published blogs</h2>
+    </div>
+    <div class="container-index">
+        <% imagenes.forEach((img, i) => { %>
+            <div class="card-index">
+                <img src="/<%= img.archivo %>" alt="Imagen <%= i + 1 %>">
+                <h2><%= img.titulo %></h2>
+                <p><%= img.descripcion %></p>
+                <div class="date"><%= new Date(img.fecha).toLocaleDateString() %></div>
+            </div>
+        <% }) %>
+    </div>
+
+<%- include('partials/footerB.ejs') %>
+</body>
+</html>
