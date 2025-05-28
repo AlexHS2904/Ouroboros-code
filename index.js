@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,7 +12,8 @@ const blogsPath = path.join(__dirname, 'blogs.json');
 const uploadsDir = 'uploads';
 
 const app = express();
-const port = 3000;
+// Puerto dinámico para Render, 3000 en local
+const port = process.env.PORT || 3000;
 
 // Configuración inicial
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
     const data = fs.readFileSync(blogsPath, 'utf8');
     blogs = JSON.parse(data);
   }
-  res.render('index', { imagenes: blogs }); // Mantenemos el nombre 'imagenes' para compatibilidad con tu EJS
+  res.render('index', { imagenes: blogs });
 });
 
 app.post('/upload', upload.single('image'), (req, res) => {

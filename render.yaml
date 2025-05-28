@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: blog-app
+    name: blog-ejs
     env: node
     buildCommand: npm install
     startCommand: npm start
-    envVars:
-      - key: NODE_ENV
-        value: production
     plan: free
+    envVars:
+      - key: NODE_VERSION
+        value: 20
