@@ -15,7 +15,7 @@
     <div class="container-index">
         <% imagenes.forEach((img, i) => { %>
             <div class="card-index">
-                <img src="/<%= img.archivo %>" alt="Imagen <%= i + 1 %>">
+                <img src="/uploads/<%= img.archivo %>" alt="Imagen <%= i + 1 %>">
                 <h2><%= img.titulo %></h2>
                 <p><%= img.descripcion %></p>
                 <div class="date"><%= new Date(img.fecha).toLocaleDateString() %></div>

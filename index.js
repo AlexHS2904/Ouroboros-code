@@ -23,7 +23,7 @@ if (!fs.existsSync(blogsPath)) fs.writeFileSync(blogsPath, JSON.stringify([], nu
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
-app.use(express.static(uploadsDir));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Configuración de vistas
 app.set('view engine', 'ejs');
