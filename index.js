@@ -9,7 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const blogsPath = path.join(__dirname, 'blogs.json');
-const uploadsDir = 'uploads';
+const uploadsDir = path.join(__dirname, 'public', 'uploads');
+
 
 const app = express();
 // Puerto dinámico para Render, 3000 en local
@@ -23,7 +24,7 @@ if (!fs.existsSync(blogsPath)) fs.writeFileSync(blogsPath, JSON.stringify([], nu
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(uploadsDir));
 
 // Configuración de vistas
 app.set('view engine', 'ejs');
