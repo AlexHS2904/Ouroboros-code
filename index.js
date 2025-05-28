@@ -13,7 +13,7 @@ const blogsPath = path.join(__dirname, 'blogs.json');
 const uploadsDir = 'uploads';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Configuración inicial
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
@@ -87,6 +87,6 @@ app.get('/write', (req, res) => {
   res.render('write');
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Servidor corriendo en http://localhost:${port}`);
 });
